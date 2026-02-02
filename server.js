@@ -54,10 +54,10 @@ app.get('/shoes', (req,res) => {
     const maxPrice = req.query.maxPrice;
     const type = req.query.type;
     if(req.query.minPrice) {
-        res.send(`Shoes that are above this price $${minPrice}: ${shoes.filter(shoe => shoe.price >= minPrice).map(shoe => shoe.name).join(', ')}`)
+        res.send(`Shoes that are above $${minPrice}: ${shoes.filter(shoe => shoe.price >= minPrice).map(shoe => shoe.name).join(', ')}`)
     }
     if(req.query.maxPrice) {
-        res.send(`Shoes that are below this price $${maxPrice}: ${shoes.filter(shoe => shoe.price <= maxPrice).map(shoe => shoe.name).join(', ')}`)
+        res.send(`Shoes that are below $${maxPrice}: ${shoes.filter(shoe => shoe.price <= maxPrice).map(shoe => shoe.name).join(', ')}`)
     }
     if(req.query.type) {
         res.send(`Shoes of this type ${type}: ${shoes.filter(shoe => shoe.type === type).map(shoe => shoe.name).join(', ')}`)
