@@ -19,3 +19,19 @@ app.get('/roll/:number', (req, res) => {
     res.send(`<h1>Please provide a valid number!</h1>`)
 }
 })
+
+app.get('/collectibles/:index', (req, res) => {
+    const collectibles = [
+        { name: 'shiny ball', price: 5.95 },
+        { name: 'autographed picture of a dog', price: 10 },
+        { name: 'vintage 1970s yogurt SOLD AS-IS', price: 0.99 }
+    ];
+    const index = parseInt(req.params.index);
+    if (index >= 0 && index <collectibles.length) {
+        res.send(`<h1>For this ${collectibles[index].name}, you can have it for the low price of $${collectibles[index].price}!</h1>`);
+    }else{
+        res.send('<h1>Sorry, this item is currently out of stock! Please, check back soon!</h1>');
+    }
+
+})
+
