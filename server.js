@@ -2,23 +2,24 @@ const express = require('express')
 
 const app = express()
 
-app.get('/greeting/:username', (req,res) => {
+app.get('/greetings/:username', (req,res) => {
     const username = req.params.username
     const capitalizedUsername = username.charAt(0).toUpperCase() + username.slice(1)
     res.send(`<h1>Hello there, ${capitalizedUsername}!</h1>`)
 })
 
-app.listen(3000, () => console.log('the server is running on port 3000'))
-
 app.get('/roll/:number', (req, res) => {
-    const number = parseInt(req.params.number)
-    const roll = Math.floor(Math.random() * number) + 1;
-    if(number && number > 0){
-    res.send(`<h1>You rolled a ${roll}!</h1>`)
-}else{
-    res.send(`<h1>Please provide a valid number!</h1>`)
-}
-})
+    const number = Number(req.params.number);  
+        if(isNaN(number)){
+             return res.send("You must specify a number.");
+            }
+    const roll = Math.floor(Math.random() * (number + 1))
+        if(number && number > 0){
+            res.send(`<h1>You rolled a ${roll}!</h1>`)
+            }else{
+            res.send(`<h1>Please provide a valid number!</h1>`)
+            }
+        });
 
 app.get('/collectibles/:index', (req, res) => {
     const collectibles = [
@@ -50,17 +51,14 @@ const shoes = [
 ];
 
 app.get('/shoes', (req,res) => {
-    const minPrice = req.query.minPrice;
-    const maxPrice = req.query.maxPrice;
-    const type = req.query.type;
-    if(req.query.minPrice) {
-        res.send(`Shoes that are above $${minPrice}: ${shoes.filter(shoe => shoe.price >= minPrice).map(shoe => shoe.name).join(', ')}`)
-    }
-    if(req.query.maxPrice) {
-        res.send(`Shoes that are below $${maxPrice}: ${shoes.filter(shoe => shoe.price <= maxPrice).map(shoe => shoe.name).join(', ')}`)
-    }
-    if(req.query.type) {
-        res.send(`Shoes of this type ${type}: ${shoes.filter(shoe => shoe.type === type).map(shoe => shoe.name).join(', ')}`)
-    }
-    res.send(`${shoes.map(shoe => shoe.name).join(', ')}`)
-})
+    let filteredShoes = shoes;
+        if(req.query.minPrice) {
+            filteredShoes = filteredShoes.filter(shoe => shoe.price >= Number(req.query.minPrice))}
+        if(req.query.maxPrice) {
+            filteredShoes = filteredShoes.filter(shoe => shoe.price <= Number(req.query.maxPrice))}
+        if(req.query.type) {
+            filteredShoes = filteredShoes.filter(shoe => shoe.type === req.query.type)}
+    res.json(filteredShoes);
+});
+
+app.listen(3000, () => console.log('the server is running on port 3000'))
