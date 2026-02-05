@@ -13,13 +13,12 @@ app.get('/roll/:number', (req, res) => {
         if(isNaN(number)){
              return res.send("You must specify a number.");
             }
-    const roll = Math.floor(Math.random() * (number + 1))
-        if(number && number > 0){
-            res.send(`<h1>You rolled a ${roll}!</h1>`)
-            }else{
-            res.send(`<h1>Please provide a valid number!</h1>`)
-            }
-        });
+        if(number < 0) {
+            res.send('Please provide a valid number!');
+        }
+    const roll = Math.floor(Math.random() * (number + 1));
+        res.send(`<h1>You rolled a ${roll}!</h1>`);
+    });
 
 app.get('/collectibles/:index', (req, res) => {
     const collectibles = [
@@ -36,10 +35,6 @@ app.get('/collectibles/:index', (req, res) => {
 
 })
 
-app.get('/hello', (req, res) => {
-    res.send(`Hello there, ${req.query.name}! I hear you are ${req.query.age} years old!`);
-});
-
 const shoes = [
     { name: "Birkenstocks", price: 50, type: "sandal" },
     { name: "Air Jordans", price: 500, type: "sneaker" },
@@ -52,13 +47,14 @@ const shoes = [
 
 app.get('/shoes', (req,res) => {
     let filteredShoes = shoes;
-        if(req.query.minPrice) {
-            filteredShoes = filteredShoes.filter(shoe => shoe.price >= Number(req.query.minPrice))}
-        if(req.query.maxPrice) {
-            filteredShoes = filteredShoes.filter(shoe => shoe.price <= Number(req.query.maxPrice))}
+        if (req.query['min-price']) { 
+            filteredShoes = filteredShoes.filter(shoe => shoe.price >= Number(req.query['min-price'])); } 
+        if (req.query['max-price']) { 
+            filteredShoes = filteredShoes.filter(shoe => shoe.price <= Number(req.query['max-price'])); }
         if(req.query.type) {
             filteredShoes = filteredShoes.filter(shoe => shoe.type === req.query.type)}
     res.json(filteredShoes);
 });
+
 
 app.listen(3000, () => console.log('the server is running on port 3000'))
